@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+    include: tableConfig  #引入
+
+---
+spring:
+  profiles: dev
+  #rabbitmq连接配置
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8081
+
+
+---
+spring:
+  profiles: pro

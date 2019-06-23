@@ -1,0 +1,20 @@
+#配置说明：provide指双方同步数据中，提供数据的一方；receive指接收数据的一方
+tables:
+  #提供数据的表名
+  provideTableName: CT_LINKCOMP
+  #接收数据的表名
+  receiveTableName: CT_LINKCOMP
+  #过滤提供数据的关键字段（一般使用主键）
+  provideKey: ID
+  #用于查询已收到数据关键字段的最大值（一般用于主键，自增）
+  receiveKey: ID
+  #用于过滤数据的其他查询条件，这里是直接拼接sql条件
+  condition: 1 = 1
+  #每次同步数据的数量，默认为50
+  pageSize: 50
+
+  #provide <<====>> receive ，双方字段的关系映射
+
+
+
+

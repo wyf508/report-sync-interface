@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djhu.dao.receive.ReceiveMapper">
+
+    <select id="selectMaxPrimary" resultType="java.lang.String">
+        select max(${receiveKey}) from ${receiveTableName}
+    </select>
+
+    <!-- 数据同步：动态插入 -->
+    <insert id="insertData" parameterType="Map">
+        insert into ${receiveTableName}
+        <foreach collection="params.keys" item="key" open="(" close=")"
+                 separator=",">
+            ${key}
+        </foreach>
+        values
+        <foreach collection="params.keys" item="key" open="(" close=")"
+                 separator=",">
+            #{params[${key}]}
+        </foreach>
+    </insert>
+
+
+</mapper>
