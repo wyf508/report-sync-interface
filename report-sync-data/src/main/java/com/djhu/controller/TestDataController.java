@@ -1,14 +1,13 @@
 package com.djhu.controller;
 
-import com.djhu.dao.receive.ReceiveMapper;
+import com.djhu.config.TablesConfig;
 import com.djhu.dao.provide.ProvideMapper;
+import com.djhu.dao.receive.ReceiveMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author yf.wu
@@ -24,22 +23,19 @@ public class TestDataController {
     @Autowired
     private ProvideMapper provideMapper;
 
+    @Autowired
+    private TablesConfig tablesConfig;
+
 
     @RequestMapping("/getSourceData")
-    public String getSource(){
-        String result = receiveMapper.selectMaxPrimary("CT_LINKCOMP", "ID");
+    public Object getSource() {
+        Object result = receiveMapper.selectMaxPrimary(tablesConfig);
         return result;
     }
 
     @RequestMapping("/getProvideData")
-    public List getProvide(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("tableName","CT_LINKCOMP");
-        map.put("sourceKey","id");
-        map.put("provideKeyVal",100);
-        map.put("condition","CELLTREEID > 14200 ");
-        map.put("pageSize",1);
-        List list = provideMapper.selectProvideData(map);
+    public List getProvide() {
+        List list = provideMapper.selectProvideData(tablesConfig);
         return list;
     }
 

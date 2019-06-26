@@ -1,0 +1,114 @@
+#配置说明：provide指双方同步数据中，提供数据的一方；receive指接收数据的一方
+tables:
+  #提供数据的表名
+  provideTableName: HLHT_ANAESTHETIZE_RECORD
+#  provideTableName: EMPLOYEE_PROVIDE
+  #接收数据的表名
+  receiveTableName: REPORT_ANAESTHETIZE
+#  receiveTableName: EMPLOYEE_RECEIVE
+  #过滤提供数据的关键字段（一般使用主键）
+  provideKey: ZYLSH
+#  provideKey: ID
+  #用于查询已收到数据关键字段的最大值（一般用于主键，自增）
+  receiveKey: REPORT_ZYLSH
+#  receiveKey: ID
+  #定义过滤字段的值（一般选用自增的主键），默认为空，否则按配置的值去筛选provideKey>primaryVal的数据
+  primaryVal: 
+  #用于过滤数据的其他查询条件，这里是直接拼接sql条件
+  condition: and QMRQSJ > sysdate -1
+  #每次同步数据的数量，默认为50（max：500，min:1）
+  pageSize: 50
+  #是否同步主键（true:主键值会同步一致，false：主键不同步，主键采用自增方式同步数据）
+  #syncPrimaryKey: true
+  #设置空闲时重新开始数据同步任务的时间间隔，单位秒
+  restartTime: 30
+  #用于保存数据时，设置receive的某些字段默认值(DATE字段需要日期格式:yyyyMMddHHmmss配置，如20190610092210)
+  defaultVal:
+    REPORT_STATUS: 0
+    REPORT_CREATEDATE: 2019/06/10 09:12:21
+    REPORT_NOTE: 同步测试数据
+
+  #双方字段的关系映射--> provide: receive
+  fieldMapping:
+#     ID: ID
+#     LASTNAME: LASTNAME
+#     EMAIL: EMAIL
+#     GENDER: GENDER
+#     CREATEDATE: CREATEDATE
+    ZYLSH: REPORT_ZYLSH
+    MJZH: REPORT_MJZH
+    ZYH: REPORT_ZYH
+    DZSQDBH: REPORT_DZSQDBH
+    KSMC: REPORT_KSMC
+    BQMC: REPORT_BQMC
+    BFH: REPORT_BFH
+    BCH: REPORT_BCH
+    SSJBH: REPORT_SSJBH
+    HZXM: REPORT_HZXM
+    XBDM: REPORT_XBDM
+    NLS: REPORT_NLS
+    NLY: REPORT_NLY
+    TZ: REPORT_TZ
+    ABO: REPORT_ABO
+    RH: REPORT_RH
+    SQZDBM: REPORT_SQZDBM
+    SHZDBM: REPORT_SHZDBM
+    SSJCZBM: REPORT_SHZDBM
+    SSTWDM: REPORT_SSTWDM
+    MZFFDM: REPORT_MZFFDM
+    QGCGFL: REPORT_QGCGFL
+    MZYWMC: REPORT_MZYWMC
+    MZTW: REPORT_MZTW
+    HXLXDM: REPORT_HXLXDM
+    MZMS: REPORT_MZMS
+    CGJCXMMC: REPORT_CGJCXMMC
+    CGJCXMJG: REPORT_CGJCXMJG
+    TSJCXMMC: REPORT_TSJCXMMC
+    TSJCXMJG: REPORT_TSJCXMJG
+    MZHBBZDM: REPORT_MZHBBZDM
+    ZLGCMS: REPORT_ZLGCMS
+    CCGC: REPORT_CCGC
+    SSY: REPORT_SSY
+    SZY: REPORT_SZY
+    TW: REPORT_TW
+    XL: REPORT_XL
+    ML: REPORT_ML
+    HXPL: REPORT_HXPL
+    ASA: REPORT_ASA
+    MZXG: REPORT_MZXG
+    MZQYY: REPORT_MZQYY
+    SSKSRQSJ: REPORT_SSKSRQSJ
+    MZKSRQSJ: REPORT_MZKSRQSJ
+    SSJSRQSJ: REPORT_SSJSRQSJ
+    CSSSRQSJ: REPORT_CSSSRQSJ
+    SSZXM: REPORT_SSZXM
+    YWMC: REPORT_YWMC
+    YWYF: REPORT_YWYF
+    YWSYPL: REPORT_YWSYPL
+    YWSYJLDW: REPORT_YWSYJLDW
+    YWSYCJL: REPORT_YWSYCJL
+    YWSYZJL: REPORT_YWSYZJL
+    YWSYTJDM: REPORT_YWSYTJDM
+    SXRQSJ: REPORT_SXRQSJ
+    SXPZDM: REPORT_SXPZDM
+    SXL: REPORT_SXL
+    SXLJLDW: REPORT_SXLJLDW
+    SXFYBZ: REPORT_SXFYBZ
+    SZSYXM: REPORT_SZSYXM
+    CXL: REPORT_CXL
+    HZQXDM: REPORT_HZQXDM
+    MZYSQM: REPORT_MZYSQM
+    QMRQSJ: REPORT_QMRQSJ
+
+#  fields:
+#    - {ZYLSH: REPORT_ZYLSH}
+#    - {MJZH: REPORT_MJZH}
+#    - {ZYH: REPORT_ZYH}
+#    - {DZSQDBH: REPORT_DZSQDBH}
+#    - {ZYLSH: REPORT_ZYLSH}
+#    - {KSMC: REPORT_KSMC}
+#    - {BQMC: REPORT_BQMC}
+#    - {BFH: REPORT_BFH}
+#    - {BCH: REPORT_BCH}
+#    - {SSJBH: REPORT_SSJBH}
+#    - {HZXM: REPORT_HZXM}

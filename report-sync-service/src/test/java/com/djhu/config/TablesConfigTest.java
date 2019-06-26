@@ -1,12 +1,11 @@
 package com.djhu.config;
 
+import com.djhu.bean.TableColumns;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author yf.wu
@@ -19,9 +18,12 @@ public class TablesConfigTest {
 
     @Autowired
     private TablesConfig tablesConfig;
+    @Autowired
+    private TableColumns tableColumns;
 
     @Test
     public void testConfig() {
-        System.out.println("-----tablesConfig------" + tablesConfig);
+        System.out.println("测试系统配置tablesConfig:  " + tablesConfig);
+        System.out.println("测试系统配置tableColumns:  " + tableColumns);
     }
 }

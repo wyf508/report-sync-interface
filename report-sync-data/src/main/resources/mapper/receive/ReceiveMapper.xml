@@ -4,9 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.djhu.dao.receive.ReceiveMapper">
 
-    <select id="selectMaxPrimary" resultType="java.lang.String">
-        select max(${receiveKey}) from ${receiveTableName}
+    <select id="selectMaxPrimary" parameterType="com.djhu.config.TablesConfig" resultType="java.lang.Object">
+        select max(${params.receiveKey}) from ${params.receiveTableName}
     </select>
+
+    <select id="getDataByPrimary" resultType="java.lang.Integer">
+        select count(1) from ${params.receiveTableName} where ${params.receiveKey} = #{params.primaryVal}
+    </select>
+
+    <select id="getReceiveTableColumns" resultType="java.util.Map">
+       select table_name, column_name, data_type, data_length, nullable
+         from user_tab_columns
+        where TABLE_NAME = #{receiveTableName}
+    </select>
+
 
     <!-- 数据同步：动态插入 -->
     <insert id="insertData" parameterType="Map">
@@ -18,7 +29,7 @@
         values
         <foreach collection="params.keys" item="key" open="(" close=")"
                  separator=",">
-            #{params[${key}]}
+            #{params[${key}] ,jdbcType=${typeParam[key]} }
         </foreach>
     </insert>
 

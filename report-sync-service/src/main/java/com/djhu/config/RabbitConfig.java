@@ -4,11 +4,14 @@ import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -38,13 +41,13 @@ public class RabbitConfig {
     private String password;
 
     @Value("${tables.receiveTableName}")
-    private static String provideTableName;
+    private String provideTableName;
 
-    public static final String EXCHANGE = "exchange_" + provideTableName;
+    public static final String EXCHANGE = "exchange_reportSync";
 
-    public static final String QUEUE = "queue_" + provideTableName;
+    public static final String QUEUE = "queue_reportSync";
 
-    public static final String ROUTINGKEY = "routingKey_" + provideTableName;
+    public static final String ROUTINGKEY = "routingKey_reportSync";
 
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port);
@@ -53,6 +56,7 @@ public class RabbitConfig {
         connectionFactory.setVirtualHost("/");
         //设置显示调用
         connectionFactory.setPublisherConfirms(true);
+        connectionFactory.setPublisherReturns(true);
         return connectionFactory;
     }
 
@@ -60,6 +64,18 @@ public class RabbitConfig {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
+        template.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
+            @Override
+            public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+                logger.info("消息发送成功:correlationData({}),ack({}),cause({})", correlationData, ack, cause);
+            }
+        });
+        template.setReturnCallback(new RabbitTemplate.ReturnCallback() {
+            @Override
+            public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+                logger.info("消息丢失:exchange({}),route({}),replyCode({}),replyText({}),message:{}", exchange, routingKey, replyCode, replyText, message);
+            }
+        });
         return template;
     }
 
@@ -89,11 +105,29 @@ public class RabbitConfig {
 
     @Bean
     public Binding binding() {
-
         return BindingBuilder.bind(queue()).to(defaultExchange()).with(RabbitConfig.ROUTINGKEY);
     }
 
-    @Bean
+    /**
+     * 单一消费者
+     *
+     * @return
+     */
+    @Bean(name = "singleListenerContainer")
+    public SimpleRabbitListenerContainerFactory listenerContainer() {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory());
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        factory.setConcurrentConsumers(1);
+        factory.setMaxConcurrentConsumers(1);
+        factory.setPrefetchCount(1);
+        factory.setTxSize(1);
+        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); //设置确认模式手工确认
+        return factory;
+    }
+
+    /*@Bean
     public SimpleMessageListenerContainer messageContainer() {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory());
         container.setQueues(queue());
@@ -104,13 +138,12 @@ public class RabbitConfig {
         container.setMessageListener(new ChannelAwareMessageListener() {
             @Override
             public void onMessage(Message message, Channel channel) throws Exception {
-                String msg = new String(message.getBody());
+                String msg = new String(message.getBody(),"utf-8");
                 logger.info("receive msg : " + msg);
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); //确认消息成功消费
             }
         });
         return container;
-    }
-
+    }*/
 
 }

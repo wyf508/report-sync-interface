@@ -1,5 +1,6 @@
 package com.djhu.dao.provide;
 
+import com.djhu.config.TablesConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,9 +17,10 @@ public interface ProvideMapper<T> {
 
     /**
      * 根据动态查询条件获取需要同步的数据
-     * @param param
-     * @return
+     *
+     * @return 需要同步的数据集
      */
-    List<Map<String, Object>> selectProvideData(@Param(value = "param") Map<String, Object> param);
+    List<Map<String, Object>> selectProvideData(@Param("params") TablesConfig tablesConfig);
+
 
 }

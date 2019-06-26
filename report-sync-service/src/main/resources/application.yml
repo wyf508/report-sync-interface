@@ -1,12 +1,12 @@
 spring:
   profiles:
     active: dev
-    include: tableConfig  #引入
+    #include: tableConfig  #引入
 
+#######开发环境配置#######
 ---
 spring:
   profiles: dev
-  #rabbitmq连接配置
   rabbitmq:
     host: 127.0.0.1
     port: 5672
@@ -16,7 +16,47 @@ spring:
 server:
   port: 8081
 
+#配置任务开启true/关闭false
+sync:
+  getProvideData:
+    start: true
+    #执行任务的间隔时间（单位：秒）
+    cron: 0/5 * *  * * ?
 
+#######生产环境配置#######
 ---
 spring:
   profiles: pro
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+server:
+  port: 8082
+
+#配置任务开启true/关闭false
+sync:
+  getProvideData:
+    start: false
+    #执行任务的间隔时间（单位：秒）
+    cron: 0/5 * *  * * ?
+
+#######测试环境配置#######
+---
+spring:
+  profiles: test
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+server:
+  port: 8083
+
+#配置任务开启true/关闭false
+sync:
+  getProvideData:
+    start: true
+    #执行任务的间隔时间（单位：秒）
+    cron: 0/5 * *  * * ?

@@ -4,20 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.djhu.dao.provide.ProvideMapper">
 
-    <select id="selectProvideData" resultType="java.util.Map" parameterType="map">
-        <if test="param.pageSize != null ">
+    <select id="selectProvideData" resultType="java.util.Map" parameterType="com.djhu.config.TablesConfig">
+        <if test="params.pageSize != null ">
           select * from(
-            select * from ${param.provideTableName}
+            select * from ${params.provideTableName}
              where 1 = 1
-            <if test="param.sourceKey != null and param.targetKeyVal != null">
-              and ${param.provideKey} <![CDATA[ > ]]> #{param.receiveKeyVal}
+            <if test="params.provideKey != null and params.primaryVal != null and params.primaryVal != ''">
+              and ${params.provideKey} <![CDATA[ > ]]> #{params.primaryVal}
             </if>
-            <if test="param.condition != null">
-              and ${param.condition}
+            <if test="params.condition != null">
+               ${params.condition}
             </if>
-            order by ${param.provideKey}
+            order by ${params.provideKey}
             )
-          where rownum  <![CDATA[ <= ]]> #{param.pageSize}
+          where rownum  <![CDATA[ <= ]]> #{params.pageSize}
         </if>
     </select>
 

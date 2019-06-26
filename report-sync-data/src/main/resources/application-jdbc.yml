@@ -1,0 +1,47 @@
+---
+#################开发环境数据源配置#####################
+spring:
+  profiles: dev
+  datasource:
+    receive:
+      username: sqd_esb
+      password: sqd_esb
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@168.168.78.108:1521/hiup
+    provide:
+      username: dj
+      password: dj
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@168.168.253.216:1521/docare
+
+---
+#################测试环境数据源配置#####################
+spring:
+  profiles: test
+  datasource:
+    receive:
+      username: sqd_esb
+      password: sqd_esb
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@168.168.78.108:1521/hiup
+    provide:
+      username: dj
+      password: dj
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@168.168.253.216:1521/docare
+
+---
+#################生产环境数据源配置#####################
+spring:
+  profiles: pro
+  datasource:
+    receive:
+      username: dj
+      password: dj
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@192.168.100.103:1521/orcl
+    provide:
+      username: test
+      password: test
+      driver: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@192.168.100.103:1521/orcl

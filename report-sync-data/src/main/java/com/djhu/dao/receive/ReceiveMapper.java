@@ -1,8 +1,10 @@
 package com.djhu.dao.receive;
 
+import com.djhu.config.TablesConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,23 +18,16 @@ import java.util.Map;
 public interface ReceiveMapper {
 
     //查出receive表主键的最大值
-    String selectMaxPrimary(@Param(value = "receiveTableName") String tableName, @Param(value = "receiveKey") String primaryKey);
-
+    Object selectMaxPrimary(@Param("params") TablesConfig tablesConfig);
 
     //动态插入数据
-    long insertData(@Param(value = "receiveTableName") String tableName, @Param(value = "params") Map<String, Object> param);
+    long insertData(@Param(value = "receiveTableName") String tableName, @Param(value = "params") Map<String, Object> params, @Param(value = "typeParam") Map<String, String> typeParam);
 
-    /**
-     * 查：（根据自定义的配置映射文件）
-     * 1.先查本地库是否已经建好数据表
-     * 2.如果未建表，系统自动按配置规则建表
-     *   如果已经建好表，
-     */
+    //数据去重查询
+    int getDataByPrimary(@Param("params") TablesConfig tablesConfig);
 
-
-    //查出目标表信息
-
-    //查出本地
+    //初始化获取表字段结构
+    List<Map<String, Object>> getReceiveTableColumns(@Param("receiveTableName") String receiveTableName);
 
 
 }

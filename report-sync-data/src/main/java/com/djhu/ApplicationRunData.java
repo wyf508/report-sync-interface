@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description SpringBoot启动类
  */
 
-//@SpringBootApplication
+@SpringBootApplication
 public class ApplicationRunData {
 
-//    public static void main(String[] args) {
-//        SpringApplication.run(ApplicationRunData.class, args);
-//    }
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationRunData.class, args);
+    }
 
 }
